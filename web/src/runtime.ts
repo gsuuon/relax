@@ -1005,7 +1005,9 @@ export class ArtifactCache implements ArtifactCacheTemplate {
 
     const result = await this.cache.match(request);
 
-    if (result === undefined) {
+    if (result) {
+      return result;
+    } else {
       const response = await fetch(request);
 
       if (response === undefined) {
@@ -1015,8 +1017,6 @@ export class ArtifactCache implements ArtifactCacheTemplate {
       const res = response.clone();
       await this.cache.put(request, response);
       return res;
-    } else {
-      return result;
     }
   }
 
@@ -1025,7 +1025,9 @@ export class ArtifactCache implements ArtifactCacheTemplate {
       this.cache = await caches.open(this.scope);
     }
 
-    return keys.every((key) => this.cache?.match(key) !== undefined);
+    const cache = this.cache;
+
+    return keys.every((key) => cache.match(key) !== undefined);
   }
 
   async deleteInCache(url: string) {
