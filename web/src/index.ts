@@ -19,14 +19,17 @@
 
 export {
   Scalar, DLDevice, DLDataType,
-  PackedFunc, Module, NDArray,
+  Module, NDArray,
   TVMArray, TVMObject, VirtualMachine,
-  InitProgressCallback, InitProgressReport,
   ArtifactCache, Instance, instantiate, hasNDArrayInCache, deleteNDArrayCache
 } from "./runtime";
-export { Disposable, LibraryProvider } from "./types";
+
 export { RPCServer } from "./rpc_server";
 export { wasmPath } from "./support";
-export { detectGPUDevice, GPUDeviceDetectOutput } from "./webgpu";
+export { detectGPUDevice } from "./webgpu";
 export { assert } from "./support";
 export { createPolyfillWASI } from "./compact";
+
+export type { PackedFunc, InitProgressCallback, InitProgressReport } from './runtime'
+export type { Disposable, LibraryProvider } from "./types";
+export type { GPUDeviceDetectOutput } from "./webgpu";
