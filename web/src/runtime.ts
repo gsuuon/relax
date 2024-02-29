@@ -1002,18 +1002,22 @@ export class ArtifactCache implements ArtifactCacheTemplate {
     if (this.cache === undefined) {
       this.cache = await caches.open(this.scope);
     }
-    let result = await this.cache.match(request);
+
+    const result = await this.cache.match(request);
 
     if (result === undefined) {
-      result = await fetch(request);
+      const response = await fetch(request);
 
-      await this.cache.put(request, result);
-    }
+      if (response === undefined) {
+        throw Error("Cannot fetch " + url);
+      }
 
-    if (result === undefined) {
-      throw Error("Cannot fetch " + url);
+      const res = response.clone();
+      await this.cache.put(request, response);
+      return res;
+    } else {
+      return result;
     }
-    return result;
   }
 
   async hasAllKeys(keys: string[]) {
