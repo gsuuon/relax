@@ -1003,10 +1003,13 @@ export class ArtifactCache implements ArtifactCacheTemplate {
       this.cache = await caches.open(this.scope);
     }
     let result = await this.cache.match(request);
+
     if (result === undefined) {
-      await this.cache.add(request);
-      result = await this.cache.match(request);
+      result = await fetch(request);
+
+      await this.cache.put(request, result);
     }
+
     if (result === undefined) {
       throw Error("Cannot fetch " + url);
     }
@@ -1017,10 +1020,8 @@ export class ArtifactCache implements ArtifactCacheTemplate {
     if (this.cache === undefined) {
       this.cache = await caches.open(this.scope);
     }
-    return this.cache.keys()
-      .then(requests => requests.map(request => request.url))
-      .then(cacheKeys => keys.every(key => cacheKeys.indexOf(key) !== -1))
-      .catch(err => false);
+
+    return keys.every((key) => this.cache?.match(key) !== undefined);
   }
 
   async deleteInCache(url: string) {
