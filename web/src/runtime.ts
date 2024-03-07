@@ -1027,7 +1027,11 @@ export class ArtifactCache implements ArtifactCacheTemplate {
 
     const cache = this.cache;
 
-    return keys.every((key) => cache.match(key) !== undefined);
+    const matches = await Promise.all(
+      keys.map(key => cache.match(key))
+    )
+
+    return matches.every(m => m != undefined)
   }
 
   async deleteInCache(url: string) {
