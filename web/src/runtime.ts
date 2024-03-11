@@ -1819,6 +1819,7 @@ export class Instance implements Disposable {
    * @param canvas The canvas.
    */
   bindCanvas(canvas: HTMLCanvasElement) {
+    throw Error("Tried to call bindCanvas")
     this.lib.webGPUContext?.bindCanvas(canvas);
   }
 

@@ -60,5 +60,5 @@ export function assert(condition: boolean, msg?: string): asserts condition {
  * @return The wasm path.
  */
 export function wasmPath(): string {
-  return __dirname + "/wasm";
+  return import.meta.dirname + "/wasm";
 }
